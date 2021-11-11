@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "options": {
+        "env": {
+            "ESPPORT": "COM5"
+        }
+    },
+    "tasks": [
+        {
+            "label": "1st: build",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["build"],
+            "presentation": {
+                "group": "build"
+            }
+        },
+        {
+            "label": "1st: flash",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["flash", "monitor"],
+            "presentation": {
+                "group": "flash"
+            }
+        },
+        
+        {
+            "label": "1st: monitor",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["monitor"],
+            "presentation": {
+                "group": "monitor"
+            }
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+# build files
+**/build/
+**/cmake-build*/
+sdkconfig
+*cache*
+
+# IDEs
+**/.idea/
+# **/.vscode/
