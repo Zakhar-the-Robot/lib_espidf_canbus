@@ -31,6 +31,7 @@ void CanBus::TxTask(void *arg)
         {
             twai_message_t msg = {};
             msg.identifier = it->first;
+            // Callback(twai_message_t &rMsg)
             SetMsgFromPointerData(it->second, msg);
             dev->Send(msg);
         }
@@ -76,6 +77,7 @@ void CanBus::RxTask(void *arg)
                 auto pair = GetDescriptorPair(dev->m_StoreDescriptor, rx_msg.identifier);
                 if (pair != nullptr) // if found, fill and send
                 {
+                    // Callback(twai_message_t &rMsg)
                     ESP_LOGD(TAG, "Message should be stored (0x%02x)!", pair->first);
                     SetPointerDataFromMsg(rx_msg, pair->second);
                 } else {
@@ -102,6 +104,7 @@ std::pair<const CanBusId_t, CanBusDataPointers_t> *CanBus::GetDescriptorPair(con
 
 void CanBus::RxTaskRequestHandler(const twai_message_t &rMsg)
 {
+    // Callback(twai_message_t &rMsg)
     auto pair = GetDescriptorPair(m_ResponseDescriptor, rMsg.identifier);
     if (pair != nullptr) // if found, fill and send
     {
