@@ -1,0 +1,24 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        },
+        {
+            "path": "node_first"
+        },
+        {
+            "path": "node_second"
+        },
+    ],
+    "settings": {
+        "files.associations": {
+            "*.html": "html",
+            "*.inc": "innopascal",
+            "*.log": "log",
+            "*.rst": "restructuredtext",
+            "*.txt": "plaintext",
+            "utility": "cpp",
+            "xutility": "cpp"
+        }
+    }
+}
