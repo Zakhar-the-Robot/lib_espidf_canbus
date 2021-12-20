@@ -1,0 +1,3 @@
+[submodule "src/portable/log.cx"]
+	path = src/portable/log.cx
+	url = git@github.com:an-dr/log.cx.git
