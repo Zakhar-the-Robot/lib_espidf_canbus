@@ -1,13 +1,14 @@
 {
     "folders": [
-        {
-            "path": ".."
-        },
+
         {
             "path": "node_first"
         },
         {
             "path": "node_second"
+        },
+        {
+            "path": ".."
         },
     ],
     "settings": {
