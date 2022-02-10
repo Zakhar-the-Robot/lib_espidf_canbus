@@ -36,10 +36,12 @@ typedef uint32_t CanBusId_t;
 class CanBus
 {
 private:
+    uint8_t m_address;
     bool m_flagStarted;
     gpio_num_t m_TxPin;
     gpio_num_t m_RxPin;
     uint64_t m_TxPeriod_ms;
+    twai_message_t m_presenceMsg;
 
     std::map<CanBusId_t, CanBusDataPointers_t> m_StoreDescriptor; // where to store received data
     std::map<CanBusId_t, CanBusDataPointers_t> m_TxDescriptor;    // what data to send periodically
@@ -63,6 +65,7 @@ private:
 
     static void TxTask(void *arg);
     static void RxTask(void *arg);
+    static void PresenceTask(void *arg);
     void RxTaskRequestHandler(const twai_message_t &rMsg);
 
 public:
@@ -71,7 +74,7 @@ public:
     CanBus();
     ~CanBus();
 
-    esp_err_t Start(gpio_num_t TxPin, gpio_num_t RxPin);
+    esp_err_t Start(uint8_t address, gpio_num_t TxPin, gpio_num_t RxPin);
     esp_err_t Stop();
     esp_err_t Send(const twai_message_t &Msg, uint32_t Timeout_ms = TIMEOUT_FOREVER);
     esp_err_t Receive(twai_message_t &rMsg, uint32_t Timeout_ms = TIMEOUT_FOREVER);

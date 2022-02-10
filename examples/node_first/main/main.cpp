@@ -34,7 +34,7 @@ static twai_message_t msg_for_response = {};
 
 extern "C" void app_main(void)
 {
-    devCanBus.Start(TX_GPIO_NUM, RX_GPIO_NUM);
+    devCanBus.Start(1U, TX_GPIO_NUM, RX_GPIO_NUM);
     esp_err_t res;
     while (devCanBus.IsStarted())
     {

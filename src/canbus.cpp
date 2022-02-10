@@ -18,6 +18,7 @@
 #define TAG "CAN"
 #define LOG_LOCAL_LEVEL ESP_LOG_DEBUG
 
+#define CAN_PRESENCE_PERIOD_MS 1000U
 #define RX_TASK_PRIO 8
 #define TX_TASK_PRIO 9
 
@@ -78,12 +79,26 @@ void CanBus::RxTask(void *arg)
                 {
                     ESP_LOGD(TAG, "Message should be stored (0x%02x)!", pair->first);
                     SetPointerDataFromMsg(rx_msg, pair->second);
-                } else {
+                }
+                else
+                {
                     ESP_LOGD(TAG, "No, useless data!");
                 }
             }
         }
         delay(0U); // for task switching
+    }
+}
+
+void CanBus::PresenceTask(void *arg)
+{
+    ESP_LOGI(TAG, "RX task is started");
+    CanBus *dev = reinterpret_cast<CanBus *>(arg);
+
+    while (dev->m_flagStarted)
+    {
+        dev->Send(dev->m_presenceMsg);
+        delay(CAN_PRESENCE_PERIOD_MS); // for task switching
     }
 }
 
@@ -155,8 +170,9 @@ bool CanBus::IsMessageRequested(const twai_message_t &rMsg)
     return (GetRequestedId() == rMsg.identifier);
 };
 
-esp_err_t CanBus::Start(gpio_num_t TxPin, gpio_num_t RxPin)
+esp_err_t CanBus::Start(uint8_t address, gpio_num_t TxPin, gpio_num_t RxPin)
 {
+    m_address = address;
     m_flagStarted = true;
     m_TxPin = TxPin;
     m_RxPin = RxPin;
@@ -164,7 +180,10 @@ esp_err_t CanBus::Start(gpio_num_t TxPin, gpio_num_t RxPin)
     const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
     const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(m_TxPin, m_RxPin, TWAI_MODE_NORMAL);
 
-    //Install TWAI driver
+    // build a presence message
+    m_presenceMsg.identifier = m_address << 8;
+
+    // Install TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(TAG, "Driver installed");
 
@@ -173,6 +192,7 @@ esp_err_t CanBus::Start(gpio_num_t TxPin, gpio_num_t RxPin)
 
     xTaskCreatePinnedToCore(TxTask, "canbus_tx", 4096, this, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(RxTask, "canbus_rx", 4096, this, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(PresenceTask, "canbus_presence", 4096, this, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
 
     return ESP_OK;
 }
@@ -183,7 +203,7 @@ esp_err_t CanBus::Stop()
     ESP_ERROR_CHECK(twai_stop());
     ESP_LOGI(TAG, "Driver stopped");
 
-    //Uninstall TWAI driver
+    // Uninstall TWAI driver
     ESP_ERROR_CHECK(twai_driver_uninstall());
     ESP_LOGI(TAG, "Driver uninstalled");
     return ESP_OK;
@@ -271,7 +291,7 @@ void CanBus::FinishRequest(uint32_t Id)
 bool CanBus::IsTimeUp(uint64_t Start_ms, uint64_t Timeout_ms)
 {
     uint64_t fromStart_ms = (Timeout_ms == TIMEOUT_FOREVER) ? static_cast<uint64_t>(0) : (millis() - Start_ms);
-    //If timeout_ms == TIMEOUT_FOREVER, fromStart_ms = 0 -> always false
+    // If timeout_ms == TIMEOUT_FOREVER, fromStart_ms = 0 -> always false
     return fromStart_ms > Timeout_ms;
 }
 
@@ -331,7 +351,10 @@ bool CanBus::IsStarted()
     return m_flagStarted;
 }
 
-CanBus::CanBus() : m_TxPeriod_ms(static_cast<uint64_t>(100U)){};
+CanBus::CanBus() : m_TxPeriod_ms(static_cast<uint64_t>(100U)),
+                   m_presenceMsg{} {
+
+                   };
 
 CanBus::~CanBus()
 {
