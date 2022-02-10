@@ -29,7 +29,7 @@ extern "C" void app_main(void)
 {
     ESP_LOGI(TAG, "-------------------------------------------------------");
     ESP_LOGI(TAG, "CAN start...");
-    devCanBus.Start(TX_GPIO_NUM, RX_GPIO_NUM);
+    devCanBus.Start(2U, TX_GPIO_NUM, RX_GPIO_NUM);
 
 
     ESP_LOGI(TAG, "-------------------------------------------------------");
