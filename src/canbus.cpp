@@ -92,7 +92,7 @@ void CanBus::RxTask(void *arg)
 
 void CanBus::PresenceTask(void *arg)
 {
-    ESP_LOGI(TAG, "RX task is started");
+    ESP_LOGI(TAG, "Presence task is started");
     CanBus *dev = reinterpret_cast<CanBus *>(arg);
 
     while (dev->m_flagStarted)
