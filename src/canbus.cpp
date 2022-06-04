@@ -18,10 +18,6 @@
 #define TAG "CAN"
 #define LOG_LOCAL_LEVEL ESP_LOG_DEBUG
 
-#define CAN_PRESENCE_PERIOD_MS 1000U
-#define RX_TASK_PRIO 8
-#define TX_TASK_PRIO 9
-
 void CanBus::TxTask(void *arg)
 {
     ESP_LOGI(TAG, "TX task is started");
@@ -33,6 +29,7 @@ void CanBus::TxTask(void *arg)
             twai_message_t msg = {};
             msg.identifier = it->first;
             SetMsgFromPointerData(it->second, msg);
+            dev->CallbackTx(msg);
             dev->Send(msg);
         }
 
@@ -59,21 +56,26 @@ void CanBus::RxTask(void *arg)
 
         if (dev->IsMessageRequest(rx_msg))
         {
+            // Message type 1: Request
             ESP_LOGD(TAG, "Request!");
-            dev->RxTaskRequestHandler(rx_msg);
+            dev->CallbackRxRequext(rx_msg);
+            dev->HandlerRxTaskRequest(rx_msg);
         }
         else // message is data
         {
             ESP_LOGD(TAG, "Data!");
             if (dev->IsMessageRequested(rx_msg))
             {
+                // Message type 2: Response
                 ESP_LOGD(TAG, "Response - requested data 0x%x!", dev->GetRequestedId());
                 dev->m_requestedMsg = rx_msg;
                 dev->m_requestResponsed = true;
             }
             else // regular data
             {
+                // Message type 3: Data
                 ESP_LOGD(TAG, "Check if to store...");
+                dev->CallbackRxData(rx_msg);
                 auto pair = GetDescriptorPair(dev->m_StoreDescriptor, rx_msg.identifier);
                 if (pair != nullptr) // if found, fill and send
                 {
@@ -115,7 +117,7 @@ std::pair<const CanBusId_t, CanBusDataPointers_t> *CanBus::GetDescriptorPair(con
     }
 }
 
-void CanBus::RxTaskRequestHandler(const twai_message_t &rMsg)
+void CanBus::HandlerRxTaskRequest(const twai_message_t &rMsg)
 {
     auto pair = GetDescriptorPair(m_ResponseDescriptor, rMsg.identifier);
     if (pair != nullptr) // if found, fill and send
@@ -351,10 +353,16 @@ bool CanBus::IsStarted()
     return m_flagStarted;
 }
 
-CanBus::CanBus() : m_TxPeriod_ms(static_cast<uint64_t>(100U)),
-                   m_presenceMsg{} {
+CanBus::CanBus()
+    : m_TxPeriod_ms(static_cast<uint64_t>(100U))
+    , m_presenceMsg {}
+    , m_pCallbackRxData(nullptr)
+    , m_pCallbackTx(nullptr)
+    , m_pCallbackRxRequest(nullptr)
+    // TODO: add all attributes to initialize all of them explicitly
+    {
 
-                   };
+    };
 
 CanBus::~CanBus()
 {
