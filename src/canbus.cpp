@@ -13,6 +13,7 @@
 #include "delay.h"
 #include "millis.h"
 #include "canbus.hpp"
+#include "canbus_version.hpp"
 #include <utility>
 
 #define TAG "CAN"
@@ -184,6 +185,10 @@ esp_err_t CanBus::Start(uint8_t address, gpio_num_t TxPin, gpio_num_t RxPin)
 
     // build a presence message
     m_presenceMsg.identifier = m_address << 8;
+    m_presenceMsg.data_length_code = 3;
+    m_presenceMsg.data[0] = CAN_VER_MAJOR;
+    m_presenceMsg.data[1] = CAN_VER_MINOR;
+    m_presenceMsg.data[2] = CAN_VER_PATCH;
 
     // Install TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
