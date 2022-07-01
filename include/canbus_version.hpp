@@ -1,6 +1,6 @@
 // *************************************************************************
 //
-// Copyright (c) 2021 Andrei Gramakov. All rights reserved.
+// Copyright (c) 2022 Andrei Gramakov. All rights reserved.
 //
 // This file is licensed under the terms of the MIT license.
 // For a copy, see: https://opensource.org/licenses/MIT
@@ -10,16 +10,14 @@
 //
 // *************************************************************************
 
-#pragma once
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 
-uint64_t millis();
+// Library version
+const unsigned char VERSION_MAJOR = 1;
+const unsigned char VERSION_MINOR = 0;
+const unsigned char VERSION_PATCH = 0;
 
-#ifdef __cplusplus
-}
-#endif
+// Protocol version
+const unsigned char QCAN_VERSION_MAJOR = 0;
+const unsigned char QCAN_VERSION_MINOR = 2;
+const unsigned char QCAN_VERSION_PATCH = 0;

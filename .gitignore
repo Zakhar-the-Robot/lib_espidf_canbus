@@ -3,7 +3,10 @@
 **/cmake-build*/
 sdkconfig
 *cache*
+sdkconfig.old
 
 # IDEs
 **/.idea/
-# **/.vscode/
+*.log
+/examples/node_first/.vscode/c_cpp_properties.json
+/examples/node_second/.vscode/c_cpp_properties.json
