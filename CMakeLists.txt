@@ -4,5 +4,6 @@ idf_component_register( SRCS
                         "${CMAKE_CURRENT_LIST_DIR}/src/millis.c"
                         
                         INCLUDE_DIRS 
-                        "${CMAKE_CURRENT_LIST_DIR}/src"
+                        "${CMAKE_CURRENT_LIST_DIR}/include"
+                        "${CMAKE_CURRENT_LIST_DIR}/src/include"
                         REQUIRES hal )

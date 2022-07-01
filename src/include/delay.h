@@ -10,9 +10,20 @@
 //
 // *************************************************************************
 
-#include "delay.h"
+#pragma once
 
-void delay(uint32_t ms)
-{
-    (ms == 0U) ? (vTaskDelay(1)) : (vTaskDelay(to_ticks(ms)));
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include <stdint.h>
+
+void delay(uint32_t ms);
+inline TickType_t to_ticks(uint32_t ms) { return ms / portTICK_PERIOD_MS; };
+inline uint32_t to_ms(TickType_t ticks) { return ticks * portTICK_PERIOD_MS; };
+
+#ifdef __cplusplus
 }
+#endif
