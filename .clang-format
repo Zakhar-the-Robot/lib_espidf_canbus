@@ -1,0 +1,6 @@
+BasedOnStyle: webkit
+Cpp11BracedListStyle: false
+IndentWidth: 4
+AlignConsecutiveDeclarations: true
+AlignAfterOpenBracket: true
+ColumnLimit: 110
