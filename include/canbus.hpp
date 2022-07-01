@@ -198,12 +198,29 @@ public:
      */
     void SetTxPeriod(uint64_t period_ms);
 
-    void SetCallbackRxData(CanBusCallback_t callback); // TODO rename to SetCallbackRxMsg
+    /**
+     * @brief Set a callback for any RX message
+     * 
+     * @param callback a callback function with signature void my_callback(CanBus*, twai_message_t& rMsg)
+     */
+    void SetCallbackRx(CanBusCallback_t callback);
+    
+    /**
+     * @brief Set a callback for a Command message
+     * 
+     * @param callback a callback function with signature void my_callback(CanBus*, twai_message_t& rMsg)
+     */
     void SetCallbackRxCmd(CanBusCallback_t callback);
+    
+    /**
+     * @brief Set a callback for a message transmission
+     * 
+     * @param callback a callback function with signature void my_callback(CanBus*, twai_message_t& rMsg)
+     */
     void SetCallbackTx(CanBusCallback_t callback);
 };
 
-inline void CanBus::SetCallbackRxData(CanBusCallback_t callback) { m_pCallbackRxData = callback; }
+inline void CanBus::SetCallbackRx(CanBusCallback_t callback) { m_pCallbackRxData = callback; }
 
 inline void CanBus::SetCallbackTx(CanBusCallback_t callback) { m_pCallbackTx = callback; }
 

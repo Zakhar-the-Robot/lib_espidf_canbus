@@ -75,7 +75,7 @@ extern "C" void app_main(void)
 
     ESP_LOGI(TAG, "-------------------------------------------------------");
     ESP_LOGI(TAG, "Setting up the Store on receiving...");
-    devCanBus.SetCallbackRxData(RxCallback);
+    devCanBus.SetCallbackRx(RxCallback);
     devCanBus.SetCallbackRxCmd(RxCmdCallback);
 
     while (1) {

@@ -41,7 +41,7 @@ extern "C" void app_main(void)
 
     devCanBus.Start(1U, TX_GPIO_NUM, RX_GPIO_NUM);
     esp_err_t res;
-    devCanBus.SetCallbackRxData(RxCallback);
+    devCanBus.SetCallbackRx(RxCallback);
     while (devCanBus.IsStarted()) {
         res = devCanBus.SendCmdMsg(DEVICE_ID_2ND, cmd[7]++, cmd[6]++, cmd[5]++, cmd[4]++, cmd[3]++, cmd[2]++,
                                    cmd[1]++, cmd[0]++);
