@@ -19,7 +19,22 @@
             "*.rst": "restructuredtext",
             "*.txt": "plaintext",
             "utility": "cpp",
-            "xutility": "cpp"
+            "xutility": "cpp",
+            "array": "cpp",
+            "vector": "cpp",
+            "xstring": "cpp",
+            "string": "cpp",
+            "string_view": "cpp",
+            "chrono": "cpp",
+            "format": "cpp",
+            "tuple": "cpp",
+            "locale": "cpp",
+            "thread": "cpp",
+            "xlocale": "cpp",
+            "xlocmes": "cpp",
+            "xlocmon": "cpp",
+            "xlocnum": "cpp",
+            "xloctime": "cpp"
         }
     }
 }

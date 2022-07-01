@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "options": {
         "env": {
-            "ESPPORT": "COM7",
+            "ESPPORT": "COM12",
             "IDF_PYTHON": "${env:IDF_PYTHON_ENV_PATH}/Scripts/python.exe",
             "IDF_PY": "${env:IDF_PATH}/tools/idf.py"
         }
@@ -12,7 +12,7 @@
             "label": "2nd: build",
             "type": "shell",
             "command": "pwsh",
-            "args": [ "-c", ". ${env:IDF_PATH}/export.ps1; & $env:IDF_PYTHON $env:IDF_PY build" ],
+            "args": [ "-c", ". ${env:IDF_PATH}/export.ps1; & idf.py build" ],
             "presentation": {
                 "group": "build"
             },         
@@ -21,7 +21,7 @@
             "label": "2nd: flash",
             "type": "shell",
             "command": "pwsh",
-            "args": [ "-c", ". ${env:IDF_PATH}/export.ps1; & $env:IDF_PYTHON $env:IDF_PY flash monitor" ],
+            "args": [ "-c", ". ${env:IDF_PATH}/export.ps1; & idf.py flash monitor" ],
             "presentation": {
                 "group": "flash"
             }
@@ -31,7 +31,7 @@
             "label": "2nd: monitor",
             "type": "shell",
             "command": "pwsh",
-            "args": [ "-c", ". ${env:IDF_PATH}/export.ps1; & $env:IDF_PYTHON $env:IDF_PY monitor" ],
+            "args": [ "-c", ". ${env:IDF_PATH}/export.ps1; & idf.py monitor" ],
             "presentation": {
                 "group": "monitor"
             }
